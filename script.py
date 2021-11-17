@@ -21,7 +21,7 @@ def getInfo(url):
     mydoc.add_paragraph(data)
 
     # Change file name and path here
-    mydoc.save("D:\\PARTH DATA\\WEB DEVELOPMENT\\WEC Recruitment Tasks\\web_scraper_result.docx")
+    mydoc.save("D:\\PARTH DATA\\WEB DEVELOPMENT\\WEC Recruitment Tasks\\web_scraper\\media\\web_scraper_result.docx")
 
 def main():
     try:
