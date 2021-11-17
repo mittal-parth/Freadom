@@ -9,15 +9,17 @@ from subprocess import run, PIPE
 def index(request):
     if request.method == 'POST':
         url = request.POST.get('url')
-        output = run([sys.executable,'D:\\PARTH DATA\\WEB DEVELOPMENT\\WEC Recruitment Tasks\\web_scraper\\script.py',url], shell=False, stdout=PIPE)
-        file_path = "D:\\PARTH DATA\\WEB DEVELOPMENT\\WEC Recruitment Tasks\\web_scraper\\media\\web_scraper_result.docx"
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname,'script.py')
+        output = run([sys.executable,filename,url], shell=False, stdout=PIPE)
+        
+        file_path = os.getcwd() + '\\media\\webscraper_result.docx'
 
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:
                 response = HttpResponse(fh.read(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
                 response['Content-Disposition'] = 'attachment; filename=web_scraper_result.docx'
                 return response
-        # response = HttpResponse("D:\\PARTH DATA\\WEB DEVELOPMENT\\WEC Recruitment Tasks\\web_scraper\\web_scraper_result.docx", content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-        # response['Content-Disposition'] = "attachment; filename=result.docx"
-        # return response
+        else:
+            return HttpResponse('Oops! Something went wrong.')
     return render(request, 'index.html')

@@ -1,4 +1,5 @@
 import docx
+import os
 import re
 import requests
 import sys
@@ -17,22 +18,18 @@ def getInfo(url):
     post = soup.find('article')
 
     data = post.text
-    print(data)
     mydoc.add_paragraph(data)
 
-    # Change file name and path here
-    mydoc.save("D:\\PARTH DATA\\WEB DEVELOPMENT\\WEC Recruitment Tasks\\web_scraper\\media\\web_scraper_result.docx")
+    file_path = os.getcwd() + '\\media\\webscraper_result.docx'
+    mydoc.save(file_path)
 
 def main():
     try:
         url = sys.argv[1]
-        # print(f"Getting Page from {url}")
         getInfo(url)
     except Exception as e:
         print(f"Got Exception on Page as {e}")
         return
-
-    # print('Done')
 
 # Driver Code
 main()
