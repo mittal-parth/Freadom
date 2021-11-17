@@ -12,20 +12,25 @@ from subprocess import run, PIPE
 def index(request):
     if request.method == 'POST':
         url = request.POST.get('url')
+        print(url)
+        #get path to scraping script
         dirname = os.path.dirname(__file__)
         script = os.path.join(dirname,'script.py')
+
+        #run the script
         output = run([sys.executable,script,url], shell=False, stdout=PIPE)
-        
+
         document = build_document(output)
-        # save document info
+
+        # save document info wihtout creating a file on server side
         buffer = io.BytesIO()
-        document.save(buffer)  # save your memory stream
-        buffer.seek(0)  # rewind the stream
+        document.save(buffer) 
+        buffer.seek(0)  
 
         # put them to streaming content response 
         # within docx content_type
         response = StreamingHttpResponse(
-            streaming_content=buffer,  # use the stream's content
+            streaming_content=buffer, 
             content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
         response['Content-Disposition'] = 'attachment; filename=web_scraper_result.docx'

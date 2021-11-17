@@ -7,24 +7,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+        integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.js"
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <title>Web Scraper</title>
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            color: white;
+            background: rgb(54, 217, 182);
+            background: linear-gradient(90deg, rgba(54, 217, 182, 1) 0%, rgba(32, 152, 126, 1) 43%, rgba(0, 212, 255, 1) 100%);
+        }
+
+
+        .user_card {
+            width: 500px;
+            margin-top: auto;
+            margin-bottom: auto;
+            background: rgb(255, 255, 255);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            padding: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+        }
+
+        .form_container {
+            margin-top: 20px;
+        }
+
+        .input-group-text {
+            background: #25274D !important;
+            color: rgb(200, 76, 76) !important;
+            border: 0 !important;
+            border-radius: 0.25rem 0 0 0.25rem !important;
+            height: 40px;
+        }
+
+        #form-title {
+            color: rgb(0, 0, 0);
+        }
+
+        .scraper_container {
+            padding: 0 2rem;
+        }
+
+        .input-group-text {
+            background: rgb(54, 217, 182) !important;
+            color: white !important;
+            border: 0 !important;
+            border-radius: 0.25rem 0 0 0.25rem !important;
+        }
+
+        #input-url {
+            color: black;
+        }
+
+        #submit-button {
+            width: 100%;
+            background: #35d9df !important;
+            color: white !important;
+            border-radius: 5px;
+        }
+        #clear-button {
+            width: 100%;
+            background: #f36060 !important;
+            color: white !important;
+            border-radius: 5px;
+        }
+
+        input[type=text] {
+            background-color: rgb(50, 171, 228);
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <p>Please enter the website URL</p>
-        <div id="form-wrapper">
-            <form method="POST" id="form">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="url">URL</label>
-                    <input type="text" name="url" class="form-control" id="input-url"
-                        placeholder="https://www.somegamingsite.com/" required>
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card">
+                <div class="d-flex justify-content-center">
+                    <h3 id="form-title">Article Scraper</h3>
                 </div>
-                <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
-            </form>
+                <div class="d-flex justify-content-center form_container" id="form-wrapper">
+                    <form method="POST" id="form">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-link"></i></span>
+                            </div>
+                            <input type="text" name="url" class="form-control" id="input-url"
+                                placeholder="Enter a URL..." required>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3 scraper_container">
+                            <button type="submit" id="submit-button">Get article</button>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3 scraper_container">
+                            <button id="clear-button" onclick="clearButtonHandler()">Clear</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -33,64 +126,9 @@
 
 
 <script>
-    // const form = document.getElementById('form')
-    // const csrf = document.getElementsByName('csrfmiddlewaretoken')
-    // const url = document.getElementById('input-url')
-    // function formSubmitHandler() {
-    // console.log('Form submitted successfully')
-    // var btn = document.getElementById('submit-button')
-    // btn.textContent = 'Submit'
-    // btn.classList.remove('btn-success')
-    // btn.classList.add('btn-primary')
-    // }
-    // function getCookie(name) {
-    //     let cookieValue = null;
-    //     if (document.cookie && document.cookie !== '') {
-    //         const cookies = document.cookie.split(';');
-    //         for (let i = 0; i < cookies.length; i++) {
-    //             const cookie = cookies[i].trim();
-    //             // Does this cookie string begin with the name we want?
-    //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-    //                 break;
-    //             }
-    //         }
-    //     }
-    //     return cookieValue;
-    // }
-    // const csrftoken = getCookie('csrftoken');
 
-    // $('#form').on('submit', function (event) {
-    //     event.preventDefault();
-    //     console.log("form submitted!")
-    //     $.ajax({
-    //         url: "http://localhost:8000/", // the endpoint
-    //         type: "POST", // http method
-    //         data: { url: $('#input-url').val() }, // data sent with the post request
-    //         headers: {
-    //             'X-CSRFToken': csrftoken,
-    //         },
-    //         // handle a successful response
-    //         success: function (response) {
-    //             $('#input-url').val(''); // remove the value from the input
-    //             // console.log(json); // log the returned json to the console
-    //             console.log("success"); // another sanity check
-    //         },
-    //         // handle a non-successful response
-    //         // error: function (xhr, errmsg, err) {
-    //         //     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-    //         //         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-    //         //     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-    //         // }
-    //     });
-    //     return false;
-    // });
-    
-    function submitButtonHandler() {
-        console.log('Submit Button clicked')
-        var btn = document.getElementById('submit-button')
-        btn.textContent = 'Submitting...'
-        btn.classList.remove('btn-primary')
-        btn.classList.add('btn-success')
+    function clearButtonHandler() {
+        document.getElementById('input-url').value = ''
     }
+
 </script>
