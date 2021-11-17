@@ -3,9 +3,10 @@ import os
 import re
 import requests
 import sys
+from datetime import datetime
 from bs4 import BeautifulSoup
 
-mydoc = docx.Document()
+# mydoc = docx.Document()
 
 def getInfo(url):
 
@@ -18,10 +19,10 @@ def getInfo(url):
     post = soup.find('article')
 
     data = post.text
-    mydoc.add_paragraph(data)
-
-    file_path = os.getcwd() + '\\media\\webscraper_result.docx'
-    mydoc.save(file_path)
+    # mydoc.add_paragraph(data)
+    print(data)
+    # file_path = os.getcwd() + '\\media\\webscraper_result'+f"{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}" + '.docx'
+    # mydoc.save(file_path)
 
 def main():
     try:
